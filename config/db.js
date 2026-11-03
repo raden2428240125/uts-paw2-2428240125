@@ -1,14 +1,13 @@
-const express = require('express');
-const app = express();
+const mongoose = require('mongoose');
 
-app.use((req, res, next) => { console.log('1. middleware A'); next(); });
-app.use((req, res, next) => { console.log('2. middleware B'); next(); });
+const connectDB = async () => {
+    try {
+        await mongoose.connect(process.env.MONGODB_URI);
+        console.log('MongoDB berhasil terhubung');
+    } catch (error) {
+        console.error('Koneksi MongoDB gagal:', error.message);
+        process.exit(1);
+    }
+};
 
-app.get('/', (req, res) => {
-  console.log('3. route handler');
-  res.send('Halo');
-});
-
-app.use((req, res, next) => { console.log('4. middleware C'); next(); });
-
-app.listen(3000);
+module.exports = connectDB;
